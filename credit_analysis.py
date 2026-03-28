@@ -393,7 +393,7 @@ for i, v in enumerate(age_dr.values):
     axes[0].text(i, v + 0.1, f'{v:.1f}%', ha='center', fontsize=9)
 
 income_clip = df_raw['monthly_income'].clip(upper=df_raw['monthly_income'].quantile(0.95))
-df_raw['income_band'] = pd.qcut(income_clip.fillna(income_clip.median()),
+df_raw['income_band'] = pd.qcut(income_clip.fillna(income_clip.median()).rank(method='first'),
     q=5, labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
 inc_dr = df_raw.groupby('income_band', observed=True)['default'].mean() * 100
 axes[1].bar(inc_dr.index, inc_dr.values,
