@@ -676,8 +676,12 @@ if TENSORFLOW_AVAILABLE:
     axes[0].set_title('Loss Curve', fontweight='bold', color=C['navy'])
     axes[0].set_xlabel('Epoch'); axes[0].set_ylabel('Binary Crossentropy Loss')
     axes[0].legend()
-    axes[1].plot(hist_df['auc'],     label='Training AUC',   color=C['green'])
-    axes[1].plot(hist_df['val_auc'], label='Validation AUC', color=C['blue'])
+    # Dynamically find the AUC column names (handles 'auc', 'AUC', 'auc_1', etc.)
+    auc_col = [c for c in hist_df.columns if 'auc' in c.lower() and 'val' not in c.lower()][0]
+    val_auc_col = [c for c in hist_df.columns if 'auc' in c.lower() and 'val' in c.lower()][0]
+
+    axes[1].plot(hist_df[auc_col],     label='Training AUC',   color=C['green'])
+    axes[1].plot(hist_df[val_auc_col], label='Validation AUC', color=C['blue'])
     axes[1].set_title('AUC Curve', fontweight='bold', color=C['navy'])
     axes[1].set_xlabel('Epoch'); axes[1].set_ylabel('AUC-ROC')
     axes[1].legend()
